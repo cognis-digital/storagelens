@@ -1,0 +1,15 @@
+{
+  "storage": [
+    {"label": "owner", "slot": "0", "offset": 0, "type": "t_address"},
+    {"label": "totalSupply", "slot": "1", "offset": 0, "type": "t_uint128"},
+    {"label": "feeRecipient", "slot": "2", "offset": 0, "type": "t_address"},
+    {"label": "paused", "slot": "3", "offset": 0, "type": "t_bool"},
+    {"label": "version", "slot": "4", "offset": 0, "type": "t_uint256"}
+  ],
+  "types": {
+    "t_address": {"label": "address", "numberOfBytes": "20"},
+    "t_uint256": {"label": "uint256", "numberOfBytes": "32"},
+    "t_uint128": {"label": "uint128", "numberOfBytes": "16"},
+    "t_bool": {"label": "bool", "numberOfBytes": "1"}
+  }
+}
