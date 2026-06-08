@@ -1,0 +1,10 @@
+{
+  "name": "@cognis/storagelens",
+  "version": "0.2.0",
+  "description": "JavaScript port of storagelens (Cognis Neural Suite)",
+  "bin": {
+    "storagelens": "index.js"
+  },
+  "license": "LicenseRef-COCL-1.0",
+  "type": "module"
+}
