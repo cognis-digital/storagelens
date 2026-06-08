@@ -1,2 +1,11 @@
-"""STORAGELENS — Diffs and decodes contract storage layouts across proxy upgrades to catch storage-collision and uninitialized-slot bugs."""
-__version__ = "0.1.0"
+"""storagelens — part of the Cognis Neural Suite."""
+try:  # re-export the tool's public API + identity from core
+    from storagelens.core import *  # noqa: F401,F403
+except Exception:  # pragma: no cover
+    pass
+try:
+    from storagelens.core import TOOL_NAME, TOOL_VERSION
+except Exception:  # pragma: no cover
+    TOOL_NAME = "storagelens"
+    TOOL_VERSION = "0.1.0"
+__version__ = TOOL_VERSION
