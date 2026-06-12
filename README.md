@@ -16,7 +16,7 @@
 </div>
 
 ```bash
-pip install cognis-storagelens
+pip install "git+https://github.com/cognis-digital/storagelens.git"
 storagelens scan .            # → prioritized findings in seconds
 ```
 
@@ -48,7 +48,7 @@ Storage-collision bugs brick upgradeable proxies silently; a CI gate that diffs 
 ## Quick start
 
 ```bash
-pip install cognis-storagelens
+pip install "git+https://github.com/cognis-digital/storagelens.git"
 storagelens --version
 storagelens scan .                       # scan current project
 storagelens scan . --format json         # machine-readable
