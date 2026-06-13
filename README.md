@@ -20,6 +20,39 @@ pip install cognis-storagelens
 storagelens scan .            # → prioritized findings in seconds
 ```
 
+## Usage — step by step
+
+1. **Install** (Python 3.9+):
+
+   ```bash
+   pip install storagelens
+   ```
+
+2. **Diff two storage layouts.** Compare an old layout against a new one to surface upgrade hazards:
+
+   ```bash
+   storagelens diff old_layout.json new_layout.json
+   ```
+
+3. **Read the output as JSON** for tooling:
+
+   ```bash
+   storagelens --format json diff old_layout.json new_layout.json | jq .
+   ```
+
+4. **Check the version** when pinning in an environment:
+
+   ```bash
+   storagelens --version
+   ```
+
+5. **Gate in CI.** Exit `0` means the layouts are upgrade-compatible; `1` means a storage collision was detected (fail the gate); `2` is a usage error:
+
+   ```bash
+   storagelens diff old_layout.json new_layout.json || echo "Storage collision detected"
+   ```
+
+
 ## Contents
 
 - [Why storagelens?](#why) · [Features](#features) · [Quick start](#quick-start) · [Example](#example) · [Architecture](#architecture) · [AI stack](#ai-stack) · [How it compares](#how-it-compares) · [Integrations](#integrations) · [Install anywhere](#install-anywhere) · [Related](#related) · [Contributing](#contributing)
