@@ -20,6 +20,12 @@ pip install "git+https://github.com/cognis-digital/storagelens.git"
 storagelens scan .            # → prioritized findings in seconds
 ```
 
+<!-- cognis:layman:start -->
+## What is this?
+
+StorageLens is a command-line tool that checks whether changes to a smart contract are safe to deploy as an upgrade. When developers update upgradeable blockchain contracts, accidentally reordering or renaming internal storage variables can silently corrupt live data — StorageLens catches these mistakes by comparing the old and new layouts and flagging any dangerous differences. It produces a clear report showing exactly which variables changed and whether the upgrade is safe to proceed. It is built for smart-contract developers and auditors who need a fast, scriptable safety gate in their build pipelines.
+<!-- cognis:layman:end -->
+
 ## Contents
 
 - [Why storagelens?](#why) · [Features](#features) · [Quick start](#quick-start) · [Example](#example) · [Architecture](#architecture) · [AI stack](#ai-stack) · [How it compares](#how-it-compares) · [Integrations](#integrations) · [Install anywhere](#install-anywhere) · [Related](#related) · [Contributing](#contributing)
@@ -45,6 +51,42 @@ Storage-collision bugs brick upgradeable proxies silently; a CI gate that diffs 
 <div align="right"><a href="#top">↑ back to top</a></div>
 
 <a name="quick-start"></a>
+<!-- cognis:install:start -->
+## Install
+
+`storagelens` is source-available (not published to PyPI) — every method below installs
+straight from GitHub. Pick whichever you prefer; the one-line scripts auto-detect
+the best tool available on your machine.
+
+**One-liner (Linux / macOS):**
+```sh
+curl -fsSL https://raw.githubusercontent.com/cognis-digital/storagelens/HEAD/install.sh | sh
+```
+
+**One-liner (Windows PowerShell):**
+```powershell
+irm https://raw.githubusercontent.com/cognis-digital/storagelens/HEAD/install.ps1 | iex
+```
+
+**Or install manually — any one of:**
+```sh
+pipx install "git+https://github.com/cognis-digital/storagelens.git"     # isolated (recommended)
+uv tool install "git+https://github.com/cognis-digital/storagelens.git"  # uv
+pip install "git+https://github.com/cognis-digital/storagelens.git"      # pip
+```
+
+**From source:**
+```sh
+git clone https://github.com/cognis-digital/storagelens.git
+cd storagelens && pip install .
+```
+
+Then run:
+```sh
+storagelens --help
+```
+<!-- cognis:install:end -->
+
 ## Quick start
 
 ```bash

@@ -111,13 +111,6 @@ def build_parser() -> argparse.ArgumentParser:
         action="version",
         version=f"{TOOL_NAME} {TOOL_VERSION}",
     )
-    parser.add_argument(
-        "--format",
-        choices=["table", "json"],
-        default="table",
-        help="output format (default: table)",
-    )
-
     sub = parser.add_subparsers(dest="command", metavar="<command>")
     p_diff = sub.add_parser(
         "diff",
@@ -126,6 +119,12 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p_diff.add_argument("old", help="path to the OLD storage-layout JSON")
     p_diff.add_argument("new", help="path to the NEW storage-layout JSON")
+    p_diff.add_argument(
+        "--format",
+        choices=["table", "json"],
+        default="table",
+        help="output format (default: table)",
+    )
     p_diff.set_defaults(func=_cmd_diff)
     return parser
 
