@@ -11,13 +11,17 @@ an upgradeable (proxy) contract.
 |------|--------|--------------|-------------|
 | 0    | 0      | `owner`      | address     |
 | 1    | 0      | `totalSupply`| uint256     |
-| 2    | 0      | `paused`     | bool        |
+| 3    | 0      | `paused`     | bool        |
+
+(Slot 2 is intentionally unused in V1 — reserved for a future packed variable.)
 
 **V2** (`new_layout.json`) was edited carelessly:
 
 - `totalSupply` (slot 1) was **retyped** `uint256 -> uint128` (RETYPED, error)
-- A new `feeRecipient` (address) was **inserted** at slot 2, shoving the
-  original `paused` flag down (INSERTED_MIDDLE, error)
+- A new `feeRecipient` (address) was **inserted** at slot 2, occupying a slot
+  within the V1 layout's range without the original author realising slot 2
+  was part of the contract's reserved address space (INSERTED_MIDDLE, error)
+- `paused` remains at slot 3 (unchanged)
 - `version` (uint256) was correctly **appended** at the end (APPENDED, info)
 
 ## What to run
