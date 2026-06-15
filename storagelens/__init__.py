@@ -1,11 +1,15 @@
 """storagelens — part of the Cognis Neural Suite."""
-try:  # re-export the tool's public API + identity from core
-    from storagelens.core import *  # noqa: F401,F403
-except Exception:  # pragma: no cover
-    pass
-try:
-    from storagelens.core import TOOL_NAME, TOOL_VERSION
-except Exception:  # pragma: no cover
-    TOOL_NAME = "storagelens"
-    TOOL_VERSION = "0.1.0"
+from storagelens.core import (  # noqa: F401
+    TOOL_NAME,
+    TOOL_VERSION,
+    StorageVariable,
+    Finding,
+    DiffResult,
+    parse_layout,
+    load_layout,
+    diff_layouts,
+    scan,
+    to_json,
+)
+
 __version__ = TOOL_VERSION

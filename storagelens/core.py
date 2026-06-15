@@ -25,6 +25,9 @@ import json
 from dataclasses import dataclass, field, asdict
 from typing import Any, Optional
 
+TOOL_NAME = "storagelens"
+TOOL_VERSION = "0.1.0"
+
 # Severity ordering for sorting / gating. Higher = worse.
 SEVERITY_ORDER = {"ok": 0, "info": 1, "warning": 2, "error": 3}
 
@@ -153,7 +156,14 @@ def parse_layout(data: dict[str, Any]) -> list[StorageVariable]:
 
 
 def load_layout(path: str) -> list[StorageVariable]:
-    """Load and parse a storage layout from a JSON file on disk."""
+    """Load and parse a storage layout from a JSON file on disk.
+
+    Raises:
+        FileNotFoundError: if *path* does not exist.
+        PermissionError: if the process lacks read permission.
+        json.JSONDecodeError: if the file is not valid JSON.
+        ValueError: if the JSON structure is not a valid layout.
+    """
     with open(path, "r", encoding="utf-8") as fh:
         data = json.load(fh)
     return parse_layout(data)
@@ -165,11 +175,27 @@ def diff_layouts(
 ) -> DiffResult:
     """Diff two parsed layouts and return findings.
 
+    Args:
+        old: Variables from the previous layout (from :func:`parse_layout`).
+        new: Variables from the new layout (from :func:`parse_layout`).
+
+    Returns:
+        :class:`DiffResult` with zero findings when the layouts are
+        identical or upgrade-compatible.
+
+    Raises:
+        TypeError: if *old* or *new* is not a list.
+
     The algorithm walks both layouts in canonical (slot, offset) order. For
     each occupied position it compares what the old version expected to live
     there vs. what the new version puts there, classifying each delta into a
     real upgrade hazard.
     """
+    if not isinstance(old, list):
+        raise TypeError(f"old layout must be a list, got {type(old).__name__}")
+    if not isinstance(new, list):
+        raise TypeError(f"new layout must be a list, got {type(new).__name__}")
+
     result = DiffResult(old_count=len(old), new_count=len(new))
 
     old_by_pos = {v.position: v for v in old}
@@ -304,3 +330,33 @@ def diff_layouts(
         key=lambda f: (-SEVERITY_ORDER[f.severity], f.slot if f.slot is not None else 0)
     )
     return result
+
+
+# ---------------------------------------------------------------------------
+# Convenience helpers used by mcp_server and other integrations.
+# ---------------------------------------------------------------------------
+
+def scan(path: str) -> DiffResult:
+    """Load a *single* layout file and return a DiffResult against itself.
+
+    This is a no-op diff (identical layouts always produce zero findings) but
+    it validates that *path* is a well-formed storage-layout file.  It is
+    primarily exposed so MCP / RPC callers have a simple one-argument
+    entry point that returns a structured result.
+
+    For a real upgrade diff use :func:`diff_layouts` directly after calling
+    :func:`load_layout` on both the old and new files.
+
+    Raises:
+        FileNotFoundError: if *path* does not exist.
+        PermissionError: if the process lacks read permission.
+        json.JSONDecodeError: if the file is not valid JSON.
+        ValueError: if the JSON structure is not a valid layout.
+    """
+    layout = load_layout(path)
+    return diff_layouts(layout, layout)
+
+
+def to_json(result: DiffResult) -> str:
+    """Serialise a :class:`DiffResult` to a compact JSON string."""
+    return json.dumps(result.to_dict())

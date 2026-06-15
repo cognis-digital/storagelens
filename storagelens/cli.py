@@ -71,8 +71,17 @@ def _cmd_diff(args: argparse.Namespace) -> int:
     except FileNotFoundError as exc:
         print(f"{TOOL_NAME}: file not found: {exc.filename}", file=sys.stderr)
         return 2
+    except PermissionError as exc:
+        print(f"{TOOL_NAME}: permission denied: {exc.filename}", file=sys.stderr)
+        return 2
+    except OSError as exc:
+        print(f"{TOOL_NAME}: cannot read file: {exc}", file=sys.stderr)
+        return 2
     except (json.JSONDecodeError, ValueError) as exc:
         print(f"{TOOL_NAME}: invalid layout: {exc}", file=sys.stderr)
+        return 2
+    except Exception as exc:  # noqa: BLE001
+        print(f"{TOOL_NAME}: unexpected error: {exc}", file=sys.stderr)
         return 2
 
     result = diff_layouts(old, new)
