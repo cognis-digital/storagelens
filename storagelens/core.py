@@ -188,6 +188,27 @@ def diff_layouts(
         nv = new_by_pos.get(pos)
 
         if nv is not None:
+            # Genuine insertion: a NEW variable now sits at this slot and the old
+            # variable has been pushed elsewhere in the new layout. That is an
+            # insertion + move, NOT a retype of the old variable at this slot.
+            moved = new_by_label.get(ov.label)
+            if (nv.label not in old_by_label and moved is not None
+                    and moved.position != pos):
+                result.findings.append(
+                    Finding(
+                        kind="MOVED",
+                        severity="error",
+                        label=ov.label,
+                        slot=ov.slot,
+                        message=(
+                            f"'{ov.label}' moved from slot {ov.slot}+{ov.offset} "
+                            f"to slot {moved.slot}+{moved.offset}; breaks existing storage"
+                        ),
+                    )
+                )
+                handled_new_positions.add(moved.position)
+                # leave nv's position unhandled -> new-position walk flags INSERTED_MIDDLE
+                continue
             handled_new_positions.add(pos)
             if ov.type_id == nv.type_id and ov.label == nv.label:
                 continue  # identical -> safe

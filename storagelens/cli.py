@@ -126,6 +126,8 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p_diff.add_argument("old", help="path to the OLD storage-layout JSON")
     p_diff.add_argument("new", help="path to the NEW storage-layout JSON")
+    p_diff.add_argument("--format", choices=["table", "json"], default=argparse.SUPPRESS,
+                        help="output format (default: table); also accepted after the verb")
     p_diff.set_defaults(func=_cmd_diff)
     return parser
 
