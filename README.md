@@ -20,6 +20,70 @@ pip install cognis-storagelens
 storagelens scan .            # → prioritized findings in seconds
 ```
 
+
+<!-- cognis:example:start -->
+## 🔎 Example output
+
+Real, reproducible output from the tool — runs offline:
+
+```console
+$ storagelens-emit --version
+storagelens 0.1.0
+```
+
+```console
+$ storagelens-emit --help
+usage: storagelens [-h] [--version] [--format {table,json}] <command> ...
+
+Diff contract storage layouts across versions to catch storage-collision bugs in upgradeable contracts.
+
+positional arguments:
+  <command>
+    diff                diff an old layout against a new layout
+
+options:
+  -h, --help            show this help message and exit
+  --version             show program's version number and exit
+  --format {table,json}
+                        output format (default: table)
+
+examples:
+  storagelens diff old_layout.json new_layout.json
+  storagelens diff old.json new.json --format json
+
+Layout files are standard solc --storage-layout JSON (also emitted by Hardhat/Foundry).
+Exit 1 on collision so it can be used directly as a CI gate.
+```
+
+> Blocks above are real `storagelens` output — reproduce them from a clone.
+
+**Sample result format** _(illustrative values — run on your own data for real findings):_
+
+```
+{
+"findings": [
+    {
+        "id": "1234567890",
+        "title": "Suspicious Network Traffic",
+        "description": "Anomalous network traffic detected from IP 192.168.1.100",
+        "mitre_attack_id": ["T1204"],
+        "relevant_observables": [
+            {
+                "type": "ip-dst",
+                "value": "8.8.8.8"
+            },
+            {
+                "type": "port",
+                "value": 443
+            }
+        ]
+    }
+]
+}
+```
+
+<!-- cognis:example:end -->
+
 ## Usage — step by step
 
 1. **Install** (Python 3.9+):

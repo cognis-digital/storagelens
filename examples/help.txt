@@ -1,0 +1,22 @@
+$ storagelens-emit --help
+
+usage: storagelens [-h] [--version] [--format {table,json}] <command> ...
+
+Diff contract storage layouts across versions to catch storage-collision bugs in upgradeable contracts.
+
+positional arguments:
+  <command>
+    diff                diff an old layout against a new layout
+
+options:
+  -h, --help            show this help message and exit
+  --version             show program's version number and exit
+  --format {table,json}
+                        output format (default: table)
+
+examples:
+  storagelens diff old_layout.json new_layout.json
+  storagelens diff old.json new.json --format json
+
+Layout files are standard solc --storage-layout JSON (also emitted by Hardhat/Foundry).
+Exit 1 on collision so it can be used directly as a CI gate.
